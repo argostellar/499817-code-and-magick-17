@@ -300,8 +300,6 @@ var onInputBlur = function (evt) {
     document.addEventListener('keydown', onPopupEscPress);
   }
 };
-// функции работают, однако при перемещении не через шифт (например, кликнув
-// вне области инпута) обработчик onPopupEscPress
-// не ставится
-setupNameInput.removeEventListener('blur', onInputBlur);
+// функции работают, понял почему не работало (предыдущее замечание(прошлый коммит))
+setupNameInput.addEventListener('blur', onInputBlur);
 setupNameInput.addEventListener('focus', onInputFocus);
