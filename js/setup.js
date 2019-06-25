@@ -5,12 +5,16 @@ var reveal = function (hiddenBlock) {
   currentClass.classList.remove('hidden');
 };
 
-// Появление блока .setup
-reveal('.setup');
+// Появление блока .setup (убрал для задания 6)
+//  reveal('.setup');
+
+// Константы клавиш
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
 
 // массивы мок-данных
 
-var firstNames = [
+var FIRST_NAMES = [
   'Иван',
   'Хуан Себастьян',
   'Мария',
@@ -20,7 +24,7 @@ var firstNames = [
   'Люпита',
   'Вашингтон'
 ];
-var secondNames = [
+var SECOND_NAMES = [
   'да Марья',
   'Верон',
   'Мирабелла',
@@ -30,7 +34,7 @@ var secondNames = [
   'Нионго',
   'Ирвинг'
 ];
-var coatColors = [
+var COAT_COLORS = [
   'rgb(101, 137, 164)',
   'rgb(241, 43, 107)',
   'rgb(146, 100, 161)',
@@ -38,13 +42,22 @@ var coatColors = [
   'rgb(215, 210, 55)',
   'rgb(0, 0, 0)'
 ];
-var eyesColors = [
+var EYES_COLORS = [
   'black',
   'red',
   'blue',
   'yellow',
   'green'
 ];
+
+var FIREBALL_COLORS = [
+  '#ee4830',
+  '#30a8ee',
+  '#5ce6c0',
+  '#e848d5',
+  '#e6e848'
+];
+
 
 // функция случайного числа для массива
 
@@ -69,19 +82,11 @@ var randomName = function (firstName, secondName, isReversed) {
   return name;
 };
 
-// Возможно стоит оптимизировать две функции ниже, так как они очень похожи
-// и заменить их одной, лишь меняя параметр?
-
-var randomCoatColor = function (coatColor) {
-  var coatRandomNumber = randomArrayNumber(coatColor);
-  var colorOfCoat = coatColor[coatRandomNumber];
-  return colorOfCoat;
-};
-
-var randomEyesColor = function (eyesColor) {
-  var eyesRandomNumber = randomArrayNumber(eyesColor);
-  var colorOfEyes = eyesColor[eyesRandomNumber];
-  return colorOfEyes;
+// функция выбора случайного цвета из массива
+var randomColor = function (colorArray) {
+  var number = randomArrayNumber(colorArray);
+  var color = colorArray[number];
+  return color;
 };
 
 // функция генерации объекта-персонажа
@@ -89,18 +94,18 @@ var randomEyesColor = function (eyesColor) {
 var generateCharacter = function (firstName, secondName, coatColour, eyesColour) {
   var characterObject = {
     name: randomName(firstName, secondName),
-    coatColor: randomCoatColor(coatColour),
-    eyesColor: randomEyesColor(eyesColour)
+    coatColor: randomColor(coatColour),
+    eyesColor: randomColor(eyesColour)
   };
   return characterObject;
 };
 
 // функция генерации массива
 
-var generateCharactersArray = function (arrayLength) {
+var generateCharactersArray = function (firstName, secondName, coatColour, eyesColour, arrayLength) {
   var array = [];
   for (var i = 0; i < arrayLength; i++) {
-    var character = generateCharacter(firstNames, secondNames, coatColors, eyesColors);
+    var character = generateCharacter(firstName, secondName, coatColour, eyesColour);
     array[i] = character;
   }
   return array;
@@ -152,8 +157,157 @@ var createAmountOfCharacters = function (arrayOfCharactersObjects) {
 };
 
 // Добавление элементов на страницу
-var exampleArray = generateCharactersArray(4);
+var exampleArray = generateCharactersArray(FIRST_NAMES, SECOND_NAMES, COAT_COLORS, EYES_COLORS, 4);
 createAmountOfCharacters(exampleArray);
 
 // Появление блока .setup-similar
 reveal('.setup-similar');
+
+// Задание 6: одеть Надежду ---------------------------------------------------------------
+
+// Модальное окно
+var setup = document.querySelector('.setup');
+
+// Кнопка открытия окна
+var setupOpen = document.querySelector('.setup-open');
+
+// Кнопка закрытия окна
+var setupClose = setup.querySelector('.setup-close');
+
+// Иконка пользователя
+// var setupOpenIcon = setupOpen.querySelector('.setup-open-icon');
+
+// Поле ввода имени пользователя (модальное окно)
+var setupNameInput = setup.querySelector('.setup-user-name');
+
+// Форма модального окна
+var setupForm = setup.querySelector('.setup-wizard-form');
+
+// Изображение волшебника
+var wizard = setup.querySelector('.setup-wizard');
+
+// Мантия волшебника
+var wizardCoat = wizard.querySelector('.wizard-coat');
+
+// Глаза волшебника
+var wizardEyes = wizard.querySelector('.wizard-eyes');
+
+// Фаербол волшебника
+var wizardFireball = setup.querySelector('.setup-fireball-wrap');
+
+var coatInput = setup.querySelector('input[name="coat-color"]');
+var eyesInput = setup.querySelector('input[name="eyes-color"]');
+var fireballInput = setup.querySelector('input[name="fireball-color"]');
+
+
+// отправка формы на указаный URL
+var formUrl = 'https://js.dump.academy/code-and-magick';
+setupForm.action = formUrl;
+
+// функция обработчика события "нажатие на esc"
+var onPopupEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closePopup();
+  }
+};
+
+var onPopupEnterPress = function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    closePopup();
+  }
+};
+
+var onOpenEnterPress = function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    openPopup();
+  }
+};
+
+var onOpenClick = function () {
+  openPopup();
+};
+
+var onCloseClick = function () {
+  closePopup();
+};
+
+// функция окрытия попапа
+var openPopup = function () {
+  // удаляем у элемента класс hidden
+  setup.classList.remove('hidden');
+  // после чего добавляем на весь документ обработчик событий (при нажатии esc)
+  // причём, функция обработчика названа явно, чтобы удалить её в дальнейшем
+  document.addEventListener('keydown', onPopupEscPress);
+};
+
+// функция закрытия попапа
+var closePopup = function () {
+  // добавляем элементу класс hidden
+  setup.classList.add('hidden');
+  // удаляем обработчик нажатия esc, так как он более нам не понадобится, модальное окно закрылось
+  document.removeEventListener('keydown', onPopupEscPress);
+};
+
+// установка обработчика событий (клика) на открытие
+setupOpen.addEventListener('click', onOpenClick);
+
+// установка обработчика событий (клавиши) на открытие
+setupOpen.addEventListener('keydown', onOpenEnterPress);
+
+// установка обработчика событий (клика) на закрытие
+setupClose.addEventListener('click', onCloseClick);
+
+// установка обработчика событий (клавиши) на закрытие
+setupClose.addEventListener('keydown', onPopupEscPress);
+
+setupClose.addEventListener('keydown', onPopupEnterPress);
+
+// функция смены цвета (не случайно) (не реализовано)
+
+/* Возможно ли создать универсальную функцию, которая заполняла бы
+    '.style.fill'? Потому что когда я попытался создать и добавить её в коде,
+    функция не сработала.
+var colorFill = function (element, colorValue) {
+  var fill = element.style.fill;
+  fill = colorValue;
+  return fill;
+};
+*/
+
+var onCoatClick = function () {
+  var color = randomColor(COAT_COLORS);
+  // var info = colorFill(wizardCoat, color);
+  wizardCoat.style.fill = color;
+  coatInput.value = color;
+};
+
+var onEyesClick = function () {
+  var color = randomColor(EYES_COLORS);
+  wizardEyes.style.fill = color;
+  eyesInput.value = color;
+};
+
+var onFireballClick = function () {
+  var color = randomColor(FIREBALL_COLORS);
+  wizardFireball.style.backgroundColor = color;
+  fireballInput.value = color;
+};
+
+wizardCoat.addEventListener('click', onCoatClick);
+wizardEyes.addEventListener('click', onEyesClick);
+wizardFireball.addEventListener('click', onFireballClick);
+
+var onInputFocus = function (evt) {
+  if (evt.target === setupNameInput) {
+    document.removeEventListener('keydown', onPopupEscPress);
+  }
+};
+
+var onInputBlur = function (evt) {
+  if (evt.target === setupNameInput) {
+    document.addEventListener('keydown', onPopupEscPress);
+  }
+};
+// функции работают, понял почему не работало (предыдущее замечание(прошлый коммит))
+setupNameInput.addEventListener('blur', onInputBlur);
+setupNameInput.addEventListener('focus', onInputFocus);
