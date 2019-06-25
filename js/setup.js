@@ -211,6 +211,12 @@ var onPopupEscPress = function (evt) {
   }
 };
 
+var onPopupEnterPress = function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    closePopup();
+  }
+};
+
 var onOpenEnterPress = function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     openPopup();
@@ -253,6 +259,8 @@ setupClose.addEventListener('click', onCloseClick);
 
 // установка обработчика событий (клавиши) на закрытие
 setupClose.addEventListener('keydown', onPopupEscPress);
+
+setupClose.addEventListener('keydown', onPopupEnterPress);
 
 // функция смены цвета (не случайно) (не реализовано)
 
