@@ -79,8 +79,8 @@ upload.addEventListener('mousedown', function (evt) {
 
 });
 
-item.addEventListener('dragstart', function (evt) {
-  //evt.preventDefault();
+item.addEventListener('dragstart', function () {
+  // evt.preventDefault();
   /*
   var data = evt.dataTransfer.getData("text/plain");
   console.log(evt);
@@ -97,8 +97,8 @@ item.addEventListener('dragstart', function (evt) {
   var onInventoryDragLeave = function () {
     inventory.style.outline = 'none';
   };
-  var onMouseDrag = function (moveEvt) {
-    //moveEvt.preventDefault();
+  var onMouseDrag = function () {
+    // moveEvt.preventDefault();
     inventory.addEventListener('dragover', onInventoryDragOver);
     inventory.addEventListener('dragleave', onInventoryDragLeave);
   };
@@ -113,17 +113,17 @@ item.addEventListener('dragstart', function (evt) {
 
 
   var onCellDragEnter = function () {
-    //inventoryCell.style.backgroundColor = 'yellow';
+    // inventoryCell.style.backgroundColor = 'yellow';
     inventoryCell.appendChild(currentItem);
   };
 
   var onCellDrop = function () {
     inventoryCell.appendChild(currentItem);
-    //inventoryCell.removeEventListener('drop', onCellDrop);
+    // inventoryCell.removeEventListener('drop', onCellDrop);
   };
 
-  var onMouseDragEnd = function (upEvt) {
-    //upEvt.preventDefault();
+  var onMouseDragEnd = function () {
+    // upEvt.preventDefault();
     document.removeEventListener('drag', onMouseDrag);
     document.removeEventListener('dragend', onMouseDragEnd);
     document.removeEventListener('dragenter', onMouseDragEnter);
