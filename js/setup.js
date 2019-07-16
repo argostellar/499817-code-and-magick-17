@@ -15,7 +15,7 @@
   var ENTER_KEYCODE = 13;
 
   // массивы мок-данных
-
+  /*
   var FIRST_NAMES = [
     'Иван',
     'Хуан Себастьян',
@@ -36,6 +36,7 @@
     'Нионго',
     'Ирвинг'
   ];
+  */
   var COAT_COLORS = [
     'rgb(101, 137, 164)',
     'rgb(241, 43, 107)',
@@ -70,7 +71,7 @@
   };
 
   // функции случайных характеристик
-
+  /*
   var randomName = function (firstName, secondName, isReversed) {
     if (isReversed) {
       var swap = 0;
@@ -83,16 +84,22 @@
     var name = firstName[firstRandomNumber] + ' ' + secondName[secondRandomNumber];
     return name;
   };
-
+  */
   // функция выбора случайного цвета из массива
   var randomColor = function (colorArray) {
     var number = randomArrayNumber(colorArray);
     var color = colorArray[number];
     return color;
   };
-
+  /*
+  // функция не случайного выбора цвета WIP WIP WIP WIP WIP WIP WIP WIP WIP
+  var changeColor = function (colorArray) {
+    var currentColor = colorArray[i];
+    return currentColor;
+  };
+  */
   // функция генерации объекта-персонажа
-
+  /*
   var generateCharacter = function (firstName, secondName, coatColour, eyesColour) {
     var characterObject = {
       name: randomName(firstName, secondName),
@@ -101,9 +108,9 @@
     };
     return characterObject;
   };
-
+  */
   // функция генерации массива
-
+  /*
   var generateCharactersArray = function (firstName, secondName, coatColour, eyesColour, arrayLength) {
     var array = [];
     for (var i = 0; i < arrayLength; i++) {
@@ -112,7 +119,7 @@
     }
     return array;
   };
-
+  */
   // Вопрос по реализации генерации массива: правильно ли я сделал записав в цикл функцию
   // с уже существующими массивами? Ведь если будут другие массивы с другими названиями,
   // функция перестанет работать
@@ -127,7 +134,7 @@
     .content
     .querySelector('.setup-similar-item');
   // создаём фрагмент, который будем добавлять на страницу
-  var fragment = document.createDocumentFragment();
+  // var fragment = document.createDocumentFragment();
 
   // Создание элементов
 
@@ -139,15 +146,15 @@
     label.textContent = characterObject.name;
 
     var coatColorFill = wizardElement.querySelector('.wizard-coat');
-    coatColorFill.style.fill = characterObject.coatColor;
+    coatColorFill.style.fill = characterObject.colorCoat;
 
     var eyesColorFill = wizardElement.querySelector('.wizard-eyes');
-    eyesColorFill.style.fill = characterObject.eyesColor;
+    eyesColorFill.style.fill = characterObject.colorEyes;
 
     return wizardElement;
 
   };
-
+  /*
   var createAmountOfCharacters = function (arrayOfCharactersObjects) {
     for (var j = 0; j < arrayOfCharactersObjects.length; j++) {
       var person = 0;
@@ -157,10 +164,10 @@
     }
     similarListElement.appendChild(fragment);
   };
-
+*/
   // Добавление элементов на страницу
-  var exampleArray = generateCharactersArray(FIRST_NAMES, SECOND_NAMES, COAT_COLORS, EYES_COLORS, 4);
-  createAmountOfCharacters(exampleArray);
+  // var exampleArray = generateCharactersArray(FIRST_NAMES, SECOND_NAMES, COAT_COLORS, EYES_COLORS, 4);
+  // createAmountOfCharacters(exampleArray);
 
   // Появление блока .setup-similar
   reveal('.setup-similar');
@@ -205,6 +212,49 @@
   // отправка формы на указаный URL
   var formUrl = 'https://js.dump.academy/code-and-magick';
   setupForm.action = formUrl;
+
+  setupForm.addEventListener('submit', function (evt) {
+    window.backend.save(new FormData(setupForm), function () {
+      setupForm.classList.add('hidden');
+    }, onLoadError);
+    evt.preventDefault();
+    var successMessage = 'Данные успешно отправлены';
+    createMessage('blue', successMessage);
+  });
+
+  var onLoadSuccess = function (wizards) {
+    var fragment = document.createDocumentFragment();
+
+    for (var i = 0; i < 4; i++) {
+      fragment.appendChild(createCharacter(wizards[i]));
+    }
+    similarListElement.appendChild(fragment);
+
+    setupForm.querySelector('.setup-similar').classList.remove('hidden');
+  };
+
+  var onLoadError = function (errorMessage) {
+    createMessage('red', errorMessage);
+  };
+
+  window.backend.load(onLoadSuccess, onLoadError);
+
+  var createMessage = function (color, message) {
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; outline: 2px solid white; text-align: center; background-color: ' + color + ';';
+    node.style.position = 'fixed';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+
+    node.textContent = message;
+    document.body.insertAdjacentElement('afterbegin', node);
+
+    node.addEventListener('click', function () {
+      node.classList.add('hidden');
+    });
+  };
+
 
   // функция обработчика события "нажатие на esc"
   var onPopupEscPress = function (evt) {
