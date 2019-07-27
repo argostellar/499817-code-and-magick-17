@@ -2,8 +2,8 @@
 'use strict';
 (function () {
   var wizard = {
-    onEyesChange: function (color) {},
-    onCoatChange: function (color) {}
+    onEyesChange: function () {},
+    onCoatChange: function () {}
   };
 
   var wizardElement = document.querySelector('.setup-wizard');
