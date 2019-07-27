@@ -68,7 +68,16 @@
     ]
   };
 
+  var setup = document.querySelector('.setup');
+  var upload = setup.querySelector('.upload');
+  var setupOpen = document.querySelector('.setup-open');
+
   window.Keycode = Keycode;
   window.Colors = Colors;
+  window.global = {
+    setup: setup,
+    upload: upload,
+    setupOpen: setupOpen
+  };
 
 })();
